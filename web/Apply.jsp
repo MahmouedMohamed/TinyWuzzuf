@@ -4,6 +4,7 @@
     Author     : hp
 --%>
 
+<%@page import="Models.Exam"%>
 <%@page import="java.util.Vector"%>
 <%@page import="Models.Candidate"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,10 +13,37 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+            <script src="jquery-3.4.1.min.js"></script>
+    <script  type="text/javascript"> 
+        
+        function addOption() { 
+            optionText =$("#list option:selected").text(); 
+            optionValue = $("#list option:selected").text().toString(); 
+  
+            $('#select1').append($('<option>').val(optionValue).text(optionText)).select(); 
+            event.preventDefault();
+        } 
+        function removeOption() { 
+            $('#select1 option:selected').remove(); 
+            event.preventDefault();
+        } 
+      
+function selectAll()
+{
+	for (var i = 0; i < document.getElementById("select1").options.length; i++)
+	{
+		document.getElementById("select1").options[i].selected = true;
+	}
+	return true;
+}
+    
+        
+    </script> 
+        </script>
     </head>
     <body>
     <h1>Hello <%=session.getAttribute("username")%></h1>     
-    <form action="HrController">
+    <form action="HrController" onsubmit="return selectAll()" method="get">
 <%
     if(Integer.parseInt(request.getAttribute("step").toString())==1)
     {
@@ -36,6 +64,7 @@
             </option><%
         }
             %>
+            </select>
             <input type="submit" name="submit" value="submitApplier"/>
             <%
     }
@@ -60,37 +89,49 @@
             </option><%
         }
             %>
+            </select>
+            <input type="submit" name="submit" value="DisApprove"/>
             <input type="submit" name="submit" value="submitJob"/>
             <%
     }
 
-else if (Integer.parseInt(request.getAttribute("step").toString())==3)
+    else if (Integer.parseInt(request.getAttribute("step").toString())==3)
     {
         Candidate candidate=new Candidate();
-Vector<String> exam=new Vector<String>();
+        Vector<Exam> exam=new Vector<Exam>();
         if(request.getAttribute("candidate")!=null)
             {
                 candidate=(Candidate)request.getAttribute("candidate");
             }
-if(request.getAttribute("exam")!=null)
+        if(request.getAttribute("exam")!=null)
             {
-                exam=(Vector<String>)request.getAttribute("exam");
+                exam=(Vector<Exam>)request.getAttribute("exam");
             }
 %>
         <h1> Select The sequence of Exams for <%=candidate.get_username()%> to join <%=request.getAttribute("job")%></h1>
         <input type="text" name="candidateName" value="<%=candidate.get_username()%>" hidden></select>
         <input type="text" name="candidateJob" value="<%=request.getAttribute("job")%>" hidden></select>
-        <select name="candidateJob">
+        <select id="list" name="Exam">
             <%
-        for(int i=0;i<candidate.get_appliedPosition().size();i++)
+        for(int i=0;i<exam.size();i++)
         {
             %>
-            <option value="<%= candidate.get_appliedPosition().elementAt(i).getTitle() %>">
-            <%= candidate.get_appliedPosition().elementAt(i).getTitle() %>
+            <option value="<%= exam.elementAt(i).getExamName() %> ">
+             <%= exam.elementAt(i).getExamName() %>
             </option><%
         }
             %>
-            <input type="submit" name="submit" value="submitJob"/>
+            </select>
+            <select name="chosen" id="select1" multiple="multiple"> 
+            </select>
+            <button onclick="addOption()"> 
+                Add option 
+            </button> 
+            <button onclick="removeOption()"> 
+                Remove option 
+            </button> 
+            <input type="date" name="deadline">
+<input type="submit" name="submit" value="Approve"/>
             <%
     }
 %>

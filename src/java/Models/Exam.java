@@ -23,4 +23,16 @@ public class Exam {
         this.relatedTo=relatedTo;
         this.Type=Type;
     }
+    public String getExamName()
+    {
+        return exam_name;
+    }
+    public String getType()
+    {
+        return Type;
+    }
+    public String getRelatedTo()
+    {
+        return relatedTo;
+    }
 }
