@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import java.sql.Date;
 /**
  *
  * @author hp
@@ -82,7 +83,43 @@ public class HrController extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("Apply.jsp");
             dispatcher.forward(request, response);
         }
+                else if(request.getParameter("submit").equals("DisApprove"))
+        {
+            step=0;
+            hrDB.disApprove(request.getParameter("candidateName"), request.getParameter("candidateJob"));
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Hr_Home.jsp");
+            dispatcher.forward(request, response);
+        }
+        else if(request.getParameter("submit").equals("Approve"))
+        {
+            Map<String, String[]> parameters = request.getParameterMap();
+            String[] values ;
+            String exam="";
+            for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+            if (entry.getKey().startsWith("chosen")) {
+            values = entry.getValue();
+            for(int i=0;i<values.length;i++)
+            {
+                exam+=values[i].trim(); //delete all white spaces and /n
+                if(i+1<values.length)
+                {
+                    exam+=" ";
+                }
+            }
+            }
+            }
+            String email=request.getParameter("candidateName");
+            String job=request.getParameter("candidateJob");
+            Date deadline=Date.valueOf(request.getParameter("deadline"));
+            hrDB.approve(email,deadline,exam,job);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Hr_Home.jsp");
+            dispatcher.forward(request, response);
+        }
     }
+
+//            hrDB.disApprove(request.getParameter("candidateName"), request.getParameter("candidateJob"));
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("Hr_Home.jsp");
+//            dispatcher.forward(request, response);
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

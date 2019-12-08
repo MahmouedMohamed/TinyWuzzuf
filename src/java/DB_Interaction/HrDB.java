@@ -9,6 +9,7 @@ import Models.Candidate;
 import Models.Exam;
 import Models.Position;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
@@ -64,5 +65,41 @@ public class HrDB {
             
         }
 	return (list);
+    }
+    public boolean disApprove(String email,String title)
+    {
+        boolean flag=false;
+        try {	
+		String sql = "DELETE FROM `apply` WHERE email="
+                        +" '"+email+"' "+"And title= '"+title+"'";
+		connection = DatabaseConnection.openConnection();
+		statement = connection.createStatement();
+		statement.executeUpdate(sql);
+		flag=true;
+            }
+        catch(Exception ex)
+        {
+            
+        }
+	return (flag);
+    }
+
+    public void approve(String email, Date deadline,String exam,String job) {
+        try {	
+//		String sql = "DELETE FROM `apply` WHERE email="
+//                        +" '"+email+"' "+"And title= '"+job+"'";
+		connection = DatabaseConnection.openConnection();
+		statement = connection.createStatement();
+//		statement.executeUpdate(sql);
+		String sql="insert into `application` VALUES("
+                    + "'" + email + "'" + ","
+                    +"'" + deadline +"'" + ","+ "'" + exam  + "'"
+                    +")";
+                statement.executeUpdate(sql);
+        }
+        catch(Exception ex)
+        {
+            
+        }
     }
 }
