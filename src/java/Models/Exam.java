@@ -12,24 +12,18 @@ import java.sql.Timestamp;
  * @author hp
  */
 public class Exam {
-    String exam_name;
-    String Type;
+    String type;
     Question question[];
     String relatedTo;
     public Exam(){}
-    public Exam(String exam_name,String Type,String relatedTo)
+    public Exam(String type,String relatedTo)
     {
-        this.exam_name=exam_name;
         this.relatedTo=relatedTo;
-        this.Type=Type;
-    }
-    public String getExamName()
-    {
-        return exam_name;
+        this.type=type;
     }
     public String getType()
     {
-        return Type;
+        return type;
     }
     public String getRelatedTo()
     {

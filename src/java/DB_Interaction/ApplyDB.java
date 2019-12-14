@@ -30,7 +30,7 @@ public class ApplyDB {
                     +")";
 		connection = DatabaseConnection.openConnection();
 		statement = connection.createStatement();
-		resultSet = statement.executeQuery(sql);
+		statement.executeUpdate(sql);
 		flag=true;
             }
         catch(Exception ex)

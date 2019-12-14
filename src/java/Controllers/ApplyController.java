@@ -6,8 +6,11 @@
 package Controllers;
 
 import DB_Interaction.ApplyDB;
+import DB_Interaction.CandidateDB;
 import DB_Interaction.DatabaseConnection;
 import DB_Interaction.HrDB;
+import DB_Interaction.MessageDB;
+import Models.Candidate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -28,8 +31,12 @@ import org.apache.catalina.Session;
  */
 public class ApplyController extends HttpServlet {
         ApplyDB applyDB=null;
+        CandidateDB candidateDB=null;
+        MessageDB messageDB=null;
         public ApplyController() {
                 applyDB = new ApplyDB();
+                candidateDB=new CandidateDB();
+                messageDB=new MessageDB();
             }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,7 +50,10 @@ public class ApplyController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(true);
+        Candidate candidate=candidateDB.get(session.getAttribute("username").toString());
+        request.setAttribute("candidate",candidate);
+        request.setAttribute("message", messageDB.get(candidate.get_username()));
         applyDB.apply(session.getAttribute("username").toString(),request.getParameter("job").toString());
         RequestDispatcher dispatcher = request.getRequestDispatcher("PositionController");
         dispatcher.forward(request, response);
