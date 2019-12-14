@@ -28,7 +28,11 @@ public class PositionDB {
                     "WHERE title NOT IN\n" +
                     "(\n" +
                     "    SELECT title from apply WHERE email ="+ email + "\n" +
-                    ") ";
+                    ") "+
+                        "AND title NOT IN\n"+
+                    "(\n" +
+                    "    SELECT title from application WHERE email ="+ email + "\n" +
+                    ") ";    
 		connection = DatabaseConnection.openConnection();
 		statement = connection.createStatement();
 		resultSet = statement.executeQuery(sql);
@@ -42,7 +46,26 @@ public class PositionDB {
         }
 	return (list);
     }
-
+    
+    public Vector<Position> getAll() {
+        Vector<Position> list=null;
+        Position position=null;
+        try {	
+		list = new Vector<Position>();
+		String sql = "SELECT title FROM position WHERE 1";    
+		connection = DatabaseConnection.openConnection();
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery(sql);
+		while(resultSet.next()) {
+                         list.add(new Position(resultSet.getString(1)));
+                }
+            }
+        catch(Exception ex)
+        {
+            
+        }
+	return (list);
+    }
     
 //    public Candidate get(String email) {
 //        Candidate candidate = null;

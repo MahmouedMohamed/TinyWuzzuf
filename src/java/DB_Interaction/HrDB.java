@@ -8,6 +8,7 @@ package DB_Interaction;
 import Models.Candidate;
 import Models.Exam;
 import Models.Position;
+import Models.Question;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -45,26 +46,26 @@ public class HrDB {
     {
         return new CandidateDB().getDetailedCandidate(email);
     }
+    
+    public Vector<Position> getAllPosition()
+    {
+        return new PositionDB().getAll();
+    }
     public Vector<Exam> getAllExam()
     {
-        Vector<Exam> list=null;
-        Exam exam=null;
-        try {	
-		list = new Vector<Exam>();
-		String sql = "SELECT * FROM `exam` WHERE 1";
-		connection = DatabaseConnection.openConnection();
-		statement = connection.createStatement();
-		resultSet = statement.executeQuery(sql);
-		while(resultSet.next()) {
-                    exam=new Exam(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3));
-                    list.add(exam);
-                }
-            }
-        catch(Exception ex)
-        {
-            
-        }
-	return (list);
+        return new ExamDB().getAllExam();
+    }
+    public boolean addExam(String type,String title)
+    {
+        return new ExamDB().add(type,title);
+    }
+    public boolean updateExam(String type,String newType)
+    {
+        return new ExamDB().update(type,newType);
+    }
+    public boolean deleteExam(String type)
+    {
+        return new ExamDB().delete(type);
     }
     public boolean disApprove(String email,String title)
     {
@@ -84,7 +85,7 @@ public class HrDB {
 	return (flag);
     }
 
-    public void approve(String email, Date deadline,String exam,String job) {
+    public void approve(String email, Date deadline,String exam,String jobTitle) {
         try {	
 //		String sql = "DELETE FROM `apply` WHERE email="
 //                        +" '"+email+"' "+"And title= '"+job+"'";
@@ -92,14 +93,42 @@ public class HrDB {
 		statement = connection.createStatement();
 //		statement.executeUpdate(sql);
 		String sql="insert into `application` VALUES("
+                    + "'" + jobTitle + "'" + ","
                     + "'" + email + "'" + ","
                     +"'" + deadline +"'" + ","+ "'" + exam  + "'"
                     +")";
+                statement.executeUpdate(sql);
+                sql="DELETE FROM `apply` WHERE email="+ " '"+email+"' "+"And title= '"+jobTitle+"'";
                 statement.executeUpdate(sql);
         }
         catch(Exception ex)
         {
             
         }
+    }
+
+    public Vector<Question> getAllQuestionsAndAnswers(String title) {
+        return new QuestionDB().getAllQuestion(title);
+    }
+    public Vector<Question> getAllQuestionsAndAnswers() {
+        return new QuestionDB().getAllQuestion();
+    }
+    public boolean addQuestion(String text, String type) {
+        return new QuestionDB().add(text, type);
+    }
+    public boolean updateQuestion(String QID, String text) {
+        return new QuestionDB().update(QID, text);
+    }
+    public boolean deleteQuestion(String QID) {
+        return new QuestionDB().delete(QID);
+    }
+    public boolean addAnswer(String text,int status,String QID) {
+        return new AnswerDB().add(text,status,QID);
+    }
+    public boolean updateAnswer(String AID,String QID,String text,int status) {
+        return new AnswerDB().update(AID,QID,text,status);
+    }
+    public boolean deleteAnswer(String AID) {
+        return new AnswerDB().delete(AID);
     }
 }

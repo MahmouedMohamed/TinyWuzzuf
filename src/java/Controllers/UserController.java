@@ -7,8 +7,10 @@ package Controllers;
 
 import DB_Interaction.CandidateDB;
 import DB_Interaction.DatabaseConnection;
+import DB_Interaction.MessageDB;
 import Models.CV;
 import Models.Candidate;
+import Models.Message;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -16,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -34,9 +37,11 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "UserController", urlPatterns = {"/UserController"})
 public class UserController extends HttpServlet {
     CandidateDB candidateDB=null;
+    MessageDB messageDB=null;
     public UserController() {
 		candidateDB = new CandidateDB();
-	}
+                messageDB= new MessageDB();
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -61,6 +66,7 @@ public class UserController extends HttpServlet {
             HttpSession session= request.getSession(true);
             session.setAttribute("username",request.getParameter("username"));
             request.setAttribute("candidate",candidate);
+            request.setAttribute("message", messageDB.get(candidate.get_username()));
             RequestDispatcher dispatcher = request.getRequestDispatcher("PositionController");
             dispatcher.forward(request, response);
         }
@@ -83,6 +89,7 @@ public class UserController extends HttpServlet {
                     HttpSession session= request.getSession(true);
                     session.setAttribute("username",request.getParameter("username"));
                     request.setAttribute("candidate",candidate);
+                    request.setAttribute("message", messageDB.get(candidate.get_username()));
                     RequestDispatcher dispatcher = request.getRequestDispatcher("PositionController");
                     dispatcher.forward(request, response);
                 }
@@ -90,6 +97,7 @@ public class UserController extends HttpServlet {
                 {
                     HttpSession session= request.getSession(true);
                     session.setAttribute("username",request.getParameter("username"));
+                    request.setAttribute("message", messageDB.get(candidate.get_username()));
                     response.sendRedirect("Hr_Home.jsp");
                 }
             }
@@ -99,6 +107,7 @@ public class UserController extends HttpServlet {
             HttpSession session=request.getSession(true);
             Candidate candidate=candidateDB.get(request.getParameter(session.getAttribute("username").toString()));
             request.setAttribute("candidate",candidate);
+            request.setAttribute("message", messageDB.get(candidate.get_username()));
             RequestDispatcher dispatcher=request.getRequestDispatcher("ApplyController");  
             dispatcher.include(request,response);  
         }

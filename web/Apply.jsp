@@ -116,8 +116,8 @@ function selectAll()
         for(int i=0;i<exam.size();i++)
         {
             %>
-            <option value="<%= exam.elementAt(i).getExamName() %> ">
-             <%= exam.elementAt(i).getExamName() %>
+            <option value="<%= exam.elementAt(i).getType() %> ">
+             <%= exam.elementAt(i).getType() %>
             </option><%
         }
             %>

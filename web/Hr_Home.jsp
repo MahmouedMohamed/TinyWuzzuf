@@ -26,9 +26,15 @@
         <h1 class="approve">Approve or dis Approve</h1>
         <input class= "approve" type="submit" name="submit" value="approve"/>
         <h1>show Add update remove available exam types</h1>
-        <input type="submit" name="submit" value="updateExam"/>
+        <input type="submit" name="submit" value="show_exam"/>
+        <input type="submit" name="submit" value="add_exam"/>
+        <input type="submit" name="submit" value="update_exam"/>
+        <input type="submit" name="submit" value="delete_exam"/>
         <h1>show Add update remove questions and answers for available exam type</h1>
-        <input type="submit" name="submit" value="updateQ&A"/>
+        <input type="submit" name="submit" value="show_questions&answers"/>
+        <input type="submit" name="submit" value="add_questions&answers"/>
+        <input type="submit" name="submit" value="update_questions&answers"/>
+        <input type="submit" name="submit" value="delete_questions&answers"/>
         <h1>Search</h1>
         <input type="submit" name="submit" value="approve"/>
         <h1>See full tests</h1>

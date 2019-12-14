@@ -52,6 +52,7 @@ public class PositionController extends HttpServlet {
         position=positionDB.get(session.getAttribute("username").toString());
         request.setAttribute("positions",position);
         request.setAttribute("candidate", request.getAttribute("candidate"));
+        request.setAttribute("message", request.getAttribute("message"));
         RequestDispatcher dispatcher = request.getRequestDispatcher("UserHome.jsp");
         dispatcher.forward(request, response);
     }

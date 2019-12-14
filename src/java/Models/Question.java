@@ -5,12 +5,43 @@
  */
 package Models;
 
+import java.util.Vector;
+
 /**
  *
  * @author hp
  */
 public class Question {
     String QID;
+    String type;
     String text;
-    Answer answer[];
+    Vector<Answer> answer;
+    public Question(){}
+    public Question(String QID,String type,String text)
+    {
+        this.QID=QID;
+        this.type=type;
+        this.text=text;
+        this.answer=answer;
+    }
+    public void setAnswer(Vector<Answer> answer)
+    {
+        this.answer=answer;
+    }
+    public String getQID()
+    {
+        return QID;
+    }
+    public String getType()
+    {
+        return type;
+    }
+    public String getText()
+    {
+        return text;
+    }
+    public Vector<Answer> getAnswer()
+    {
+        return answer;
+    }
 }
