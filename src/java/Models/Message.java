@@ -5,6 +5,8 @@
  */
 package Models;
 
+import java.util.Vector;
+
 /**
  *
  * @author hp
@@ -15,6 +17,7 @@ public class Message {
     String from;
     String to;
     boolean seen;
+    String job;
     public Message()
     {
         
@@ -26,5 +29,29 @@ public class Message {
         this.from=from;
         this.to=to;
         this.seen=seen;
+    }
+    public void setJob(String job)
+    {
+        this.job=job;
+    }
+    public String getBody()
+    {
+        return body;
+    }
+    public String getMessageID()
+    {
+        return MessageID;
+    }
+    public String getFrom()
+    {
+        return from;
+    }
+    public String getTo()
+    {
+        return to;
+    }
+    public String getJob()
+    {
+        return job;
     }
 }

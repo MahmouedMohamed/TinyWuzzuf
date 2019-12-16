@@ -97,7 +97,7 @@ public class UserController extends HttpServlet {
                 {
                     HttpSession session= request.getSession(true);
                     session.setAttribute("username",request.getParameter("username"));
-                    request.setAttribute("message", messageDB.get(candidate.get_username()));
+                    request.setAttribute("message", messageDB.get(session.getAttribute("username").toString()));
                     response.sendRedirect("Hr_Home.jsp");
                 }
             }

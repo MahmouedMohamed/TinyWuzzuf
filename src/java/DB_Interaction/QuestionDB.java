@@ -149,4 +149,89 @@ public class QuestionDB {
         }
 	return (flag);
     }
+    public Vector<Question> getRandQuestion(String type,String email,String title)
+    {
+        Vector<Question> list=null;
+        Question question=null;	
+        Vector<Answer> answerList=null;
+        Answer answer=null;
+        try{
+            list = new Vector<Question>();
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String sql = "SELECT * FROM `solution` WHERE type = "+"'"+type+"' AND "+
+                    "email = '"+email+"' AND title= '"+title+"' AND AID = 'null'";
+            resultSet = statement.executeQuery(sql);
+            if(resultSet.next()==false)
+            {
+                sql = "SELECT * FROM `question` WHERE type = "+"'"+type+"'"+
+                    " ORDER BY RAND() LIMIT 5";
+                resultSet = statement.executeQuery(sql);
+            while(resultSet.next()) {
+                Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, resultSet.getString(1));
+                question=new Question(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3));
+                list.add(question);
+            }
+            for(int i=0;i<list.size();i++)
+            {
+                answerList=new Vector<Answer>();
+                sql="SELECT * from answer where QID = '"+list.elementAt(i).getQID()+"' AND status = 1 ORDER BY RAND() LIMIT 1";
+                resultSet=statement.executeQuery(sql);
+                while(resultSet.next())
+                {
+                    answer=new Answer(resultSet.getString(1),resultSet.getString(3),resultSet.getBoolean(4));
+                    answerList.add(answer);
+                }
+                sql="SELECT * from answer where QID = '"+list.elementAt(i).getQID()+"' AND status = 0 ORDER BY RAND() LIMIT 3";
+                resultSet=statement.executeQuery(sql);
+                while(resultSet.next())
+                {
+                    answer=new Answer(resultSet.getString(1),resultSet.getString(3),resultSet.getBoolean(4));
+                    answerList.add(answer);
+                }
+                list.elementAt(i).setAnswer(answerList);
+            }
+            new SolutionDB().initialSave(type,list, email,title);
+            return (list);
+        }
+        else
+        {
+            resultSet.beforeFirst();
+            while(resultSet.next())
+            {
+                question=new Question(resultSet.getString(4));
+                list.add(question);
+            }
+            for(int i=0;i<list.size();i++)
+            {
+                sql = "SELECT * FROM `question` WHERE QID = "+"'"+list.elementAt(i).getQID()+"'";
+                resultSet= statement.executeQuery(sql);
+                while(resultSet.next()){
+                    list.elementAt(i).setType(resultSet.getString(2));
+                    list.elementAt(i).setText(resultSet.getString(3));
+                }
+                answerList=new Vector<Answer>();
+                sql="SELECT * from answer where QID = '"+list.elementAt(i).getQID()+"' AND status = 1 ORDER BY RAND() LIMIT 1";
+                resultSet=statement.executeQuery(sql);
+                while(resultSet.next())
+                {
+                    answer=new Answer(resultSet.getString(1),resultSet.getString(3),resultSet.getBoolean(4));
+                    answerList.add(answer);
+                }
+                sql="SELECT * from answer where QID = '"+list.elementAt(i).getQID()+"' AND status = 0 ORDER BY RAND() LIMIT 3";
+                resultSet=statement.executeQuery(sql);
+                while(resultSet.next())
+                {
+                    answer=new Answer(resultSet.getString(1),resultSet.getString(3),resultSet.getBoolean(4));
+                    answerList.add(answer);
+                }
+                list.elementAt(i).setAnswer(answerList);
+            }
+        }
+            }
+        catch (SQLException ex) {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           return list; 
+    }
 }

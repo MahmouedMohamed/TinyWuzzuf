@@ -6,6 +6,7 @@
 package DB_Interaction;
 
 import Models.Candidate;
+import Models.Exam;
 import Models.Message;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.UUID;
 import java.util.Vector;
 import jdk.jfr.Timestamp;
 
@@ -42,6 +44,17 @@ public class MessageDB {
                         resultSet.getString(3),
                         resultSet.getString(4),
                         resultSet.getBoolean(5));
+                        String word[]=resultSet.getString(1).split(" ");
+                        String job="";
+                        for(int i=4;i<word.length;i++)
+                        {
+                            if(word[i].equals("so"))
+                            {
+                                break;
+                            }
+                            job+=word[i];
+                        }
+                        message.setJob(job);
 			list.add(message);
                 }
             }
@@ -58,32 +71,80 @@ public class MessageDB {
         
         connection = DatabaseConnection.openConnection();
 		statement = connection.createStatement();
-                String query="Delete from message where 1";
+                String query="Delete FROM `message` where `from` = 'system' AND seen = '0'";
 		statement.executeUpdate(query);
                 query="Select * from application where 1";
 		resultSet = statement.executeQuery(query);
+                Vector<String> queries=new Vector<String>();
 		while(resultSet.next()) {
                     String title=resultSet.getString(1);
                     String applier=resultSet.getString(2);
                     Date deadline=resultSet.getDate(3);
                     String exams=resultSet.getString(4);
-//                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date();
-//                    formatter.format(date);
-//                    if(deadline.compareTo(date)==1)
-//                    {
+                    if(deadline.compareTo(date)==1)
+                    {
                         String sql="insert into `message` VALUES("
                         + "'" + "You have applied for "+ title + " so you have to take those exams "+ exams  + "'" + ","
-                        + "'" + (int)(Math.random()*date.getTime()*Math.pow(10,100)) + "'" + ","
+                        + "'" + UUID.randomUUID().toString() + "'" + ","
                         +"'" + "System" +"'" + ","
                         + "'" + applier  + "'" + ","
                         + "'" + 0 + "'"
                         +")";
-                statement.executeUpdate(sql);
-//                    }
+                        queries.add(sql);
+                    }
+                }
+                for(int i=0;i<queries.size();i++)
+                {
+                    statement.executeUpdate(queries.elementAt(i));
                 }
                 flag=true;
         }
+        catch(SQLException ex)
+        {
+            
+        }
+        return flag;
+    }
+    public boolean sendMessageToHr(String email,String Relatedexam,String type)
+    {
+        boolean flag=false;
+        Candidate candidate=new CandidateDB().get(email);
+        String score=new SolutionDB().getScore(email,Relatedexam,type);
+        String msg="candidate with ID "+candidate.get_username()
+                +" and telephone number = "+candidate.getTelephone()
+                +" who applied for job called "+Relatedexam
+                +" has finished exam named "+type
+                +"and he got score "+score;
+        try{
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String query="insert into `message` VALUES("
+                        + "'" + msg + "'" + ","
+                        + "'" + UUID.randomUUID().toString() + "'" + ","
+                        + "'" + "Inside" + "'" + ","
+                        + "'" + "HR"  + "'" + ","
+                        + "'" + 0 + "'"
+                        +")";
+            statement.executeUpdate(query);
+            flag=true;
+        } 
+        catch(SQLException ex)
+        {
+            
+        }
+        return flag;
+    }
+    public boolean deleteMessage(String messageID)
+    {
+        boolean flag=false;
+        try{
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String query="Delete from message where MessageID = '"+messageID+"'";
+            statement.executeUpdate(query);
+            flag=true;
+        } 
         catch(SQLException ex)
         {
             

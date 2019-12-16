@@ -6,6 +6,7 @@
 package Models;
 
 import java.sql.Timestamp;
+import java.util.Vector;
 
 /**
  *
@@ -13,13 +14,17 @@ import java.sql.Timestamp;
  */
 public class Exam {
     String type;
-    Question question[];
+    Vector<Question> question;
     String relatedTo;
     public Exam(){}
     public Exam(String type,String relatedTo)
     {
         this.relatedTo=relatedTo;
         this.type=type;
+    }
+    public void setQuestion(Vector<Question> question)
+    {
+        this.question=question;
     }
     public String getType()
     {
@@ -28,5 +33,9 @@ public class Exam {
     public String getRelatedTo()
     {
         return relatedTo;
+    }
+    public Vector<Question> getQuestion()
+    {
+        return question;
     }
 }

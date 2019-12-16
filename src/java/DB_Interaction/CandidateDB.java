@@ -104,6 +104,7 @@ public class CandidateDB{
         boolean flag = false;
 	try {
                 connection = DatabaseConnection.openConnection();
+                statement = connection.createStatement();
 		String query = "insert into `candidate` VALUES("
                     + "'" + candidate.get_username() + "'" + ","
                     +"'" + "user" +"'" + ","+ "'" + candidate.getTelephone() + "'"
