@@ -5,18 +5,9 @@
  */
 package Controllers;
 
-import DB_Interaction.CandidateDB;
-import DB_Interaction.DatabaseConnection;
-import Models.Candidate;
+import DB_Interaction.SolutionDB;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,12 +19,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author hp
  */
-@WebServlet(name = "checkExistance", urlPatterns = {"/checkExistance"})
-public class checkExistance extends HttpServlet {
-    CandidateDB candidateDB=null;
-    public checkExistance() {
-		candidateDB = new CandidateDB();
-	}
+@WebServlet(name = "submitAnswer", urlPatterns = {"/submitAnswer"})
+public class submitAnswer extends HttpServlet {
+    SolutionDB solutionDB=null;
+    public submitAnswer()
+    {
+        solutionDB=new SolutionDB();
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,24 +38,14 @@ public class checkExistance extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        Candidate candidate=candidateDB.get(request.getParameter("username"));
-        if(candidate.get_username()==null)
-        {
-            try (PrintWriter out = response.getWriter())
-            {
-                out.println("<font color=green>");
-                out.println("Available");
-                out.println("</font>");
-            }
-        }
-        else
-        {
-            try (PrintWriter out = response.getWriter()) {
-                out.println("<font color=red>");
-                out.println("Name already taken");
-                out.println("</font>");
-            }
-        }
+        HttpSession session=request.getSession();
+        solutionDB.saveAnswer(
+                session.getAttribute("username").toString(),
+                request.getParameter("testName"),
+                request.getParameter("QID"),
+                request.getParameter("AID"),
+                request.getParameter("testJob")
+        );
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

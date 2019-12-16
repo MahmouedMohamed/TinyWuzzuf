@@ -44,4 +44,15 @@ public class Question {
     {
         return answer;
     }
+    public Question(String QID)
+    {
+        this.QID=QID;
+    }
+    public void setText(String text)
+    {
+        this.text=text;
+    }
+    public void setType(String type) {
+        this.type=type;
+    }
 }
