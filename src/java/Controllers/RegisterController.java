@@ -5,39 +5,25 @@
  */
 package Controllers;
 
-import DB_Interaction.ApplyDB;
 import DB_Interaction.CandidateDB;
-import DB_Interaction.DatabaseConnection;
-import DB_Interaction.HrDB;
-import DB_Interaction.MessageDB;
+import Models.CV;
 import Models.Candidate;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.catalina.Session;
 
 /**
  *
  * @author hp
  */
-public class ApplyController extends HttpServlet {
-        ApplyDB applyDB=null;
-        CandidateDB candidateDB=null;
-        MessageDB messageDB=null;
-        public ApplyController() {
-                applyDB = new ApplyDB();
-                candidateDB=new CandidateDB();
-                messageDB=new MessageDB();
-            }
+@WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
+public class RegisterController extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,9 +36,16 @@ public class ApplyController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(true);
-        applyDB.apply(session.getAttribute("username").toString(),request.getParameter("job").toString());
-        response.sendRedirect("UserController");
+        Candidate candidate=new Candidate(
+                    "user",
+                    request.getParameter("username"),
+                    request.getParameter("telephone"),
+                    new CV(request.getParameter(("cv")))
+            );
+            new CandidateDB().save(candidate);
+            HttpSession session= request.getSession(true);
+            session.setAttribute("username",request.getParameter("username"));
+            response.sendRedirect("UserController");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

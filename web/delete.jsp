@@ -34,14 +34,14 @@
             <%
         }
 %>       </select> 
-    <input type="submit" name="submit" value="deleteExam">
+    <input type="submit" name="decision" value="deleteExam">
 </form>
 <% } %>
 <% if(request.getAttribute("status").toString().equals("delete_questions&answers"))
     { %>
         <form action="HrController">
-            <input type="submit" name="submit" value="delete_Question">
-            <input type="submit" name="submit" value="delete_Answer">
+            <input type="submit" name="decision" value="delete_Question">
+            <input type="submit" name="decision" value="delete_Answer">
         </form>
 <% } %>
 <% if(request.getAttribute("status").toString().equals("delete_Question"))
@@ -61,7 +61,7 @@
             </option>
        <% } %> 
       </select> 
-<input type="submit" name="submit" value="deleteQuestion">
+<input type="submit" name="decision" value="deleteQuestion">
 </form>
 <% } %>
 
@@ -85,7 +85,7 @@
         }
          } %> 
       </select> 
-<input type="submit" name="submit" value="deleteAnswer">
+<input type="submit" name="decision" value="deleteAnswer">
 </form>
 <% } %>
     </body>

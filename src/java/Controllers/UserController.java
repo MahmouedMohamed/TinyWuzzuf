@@ -54,63 +54,30 @@ public class UserController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        if(request.getParameter("submit").equals("register"))
+        HttpSession session= request.getSession(true);
+        if(session.getAttribute("username")!=null)
         {
-            Candidate candidate=new Candidate(
-                    "user",
-                    request.getParameter("username"),
-                    request.getParameter("telephone"),
-                    new CV(request.getParameter(("cv")))
-            );
-            candidateDB.save(candidate);
-            HttpSession session= request.getSession(true);
-            session.setAttribute("username",request.getParameter("username"));
+            Candidate candidate=candidateDB.get(session.getAttribute("username").toString());
             request.setAttribute("candidate",candidate);
             request.setAttribute("message", messageDB.get(candidate.get_username()));
-            RequestDispatcher dispatcher = request.getRequestDispatcher("PositionController");
-            dispatcher.forward(request, response);
-        }
-        
-        else if(request.getParameter("submit").equals("login"))
-        {
-            Candidate candidate=candidateDB.get(request.getParameter("username"));
-            if(candidate.get_username()==null)
+            if(candidate.getPrevilige().equals("user"))
             {
-                try (PrintWriter out = response.getWriter()) {
-                        out.print("Sorry username isn't valid");  
-                        RequestDispatcher dispatcher=request.getRequestDispatcher("Login.jsp");  
-                        dispatcher.include(request,response);  
-                    }
+                request.setAttribute("candidate",candidate);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("PositionController");
+                dispatcher.forward(request, response);
             }
             else
             {
-                if(candidate.getPrevilige().equals("user"))
-                {
-                    HttpSession session= request.getSession(true);
-                    session.setAttribute("username",request.getParameter("username"));
-                    request.setAttribute("candidate",candidate);
-                    request.setAttribute("message", messageDB.get(candidate.get_username()));
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("PositionController");
-                    dispatcher.forward(request, response);
-                }
-                else
-                {
-                    HttpSession session= request.getSession(true);
-                    session.setAttribute("username",request.getParameter("username"));
-                    request.setAttribute("message", messageDB.get(session.getAttribute("username").toString()));
-                    response.sendRedirect("Hr_Home.jsp");
-                }
+                response.sendRedirect("Hr_Home.jsp");
             }
         }
-        else if(request.getParameter("submit").equals("Apply"))
+        else
         {
-            HttpSession session=request.getSession(true);
-            Candidate candidate=candidateDB.get(request.getParameter(session.getAttribute("username").toString()));
-            request.setAttribute("candidate",candidate);
-            request.setAttribute("message", messageDB.get(candidate.get_username()));
-            RequestDispatcher dispatcher=request.getRequestDispatcher("ApplyController");  
-            dispatcher.include(request,response);  
+            response.sendRedirect("Login.jsp");
         }
+        
+        
+
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

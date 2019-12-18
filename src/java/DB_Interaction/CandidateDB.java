@@ -9,6 +9,7 @@ import Models.Candidate;
 import Models.Position;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
@@ -94,7 +95,7 @@ public class CandidateDB{
                 position.add(new Position(resultSet.getString(1)));
             }
             candidate.setAppliedPosition(position);
-        }catch(Exception e) {
+        }catch(SQLException e) {
 		e.printStackTrace();
 	}
 	return candidate;

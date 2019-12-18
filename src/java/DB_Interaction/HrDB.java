@@ -131,4 +131,16 @@ public class HrDB {
     public boolean deleteAnswer(String AID) {
         return new AnswerDB().delete(AID);
     }
+    public Vector<String> getAllCandidate() {
+        return new SolutionDB().getAllCandidate();
+    }
+    public Vector<String> getAllTakenTest(String email) {
+        return new SolutionDB().getAllTakenTest(email);
+    }
+    public Vector<String> getTestAndSolution(String type,String email) {
+        return new SolutionDB().getTestAndSolution(type,email) ;
+    }
+    public String getAllScore(String email) {
+        return new SolutionDB().getAllScore(email) ;
+    }
 }

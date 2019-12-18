@@ -7,6 +7,7 @@ package Controllers;
 
 import DB_Interaction.DatabaseConnection;
 import DB_Interaction.HrDB;
+import DB_Interaction.MessageDB;
 import DB_Interaction.PositionDB;
 import Models.Candidate;
 import Models.Exam;
@@ -36,9 +37,11 @@ public class HrController extends HttpServlet {
     Vector<Position> position;
     int step=0;
     HrDB hrDB=null;
+    MessageDB messageDB=null;
     public HrController() {
             candidateEmail=new Vector<String>();
             hrDB = new HrDB();
+            messageDB=new MessageDB();
 	}
     public void reDirect(HttpServletRequest request, HttpServletResponse response,String route) throws IOException, ServletException
     {
@@ -57,7 +60,7 @@ public class HrController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        if(request.getParameter("submit").equals("approve"))
+        if(request.getParameter("decision").equals("approve"))
         {
             step=1;
             candidateEmail=hrDB.getAppliers();
@@ -65,7 +68,7 @@ public class HrController extends HttpServlet {
                 request.setAttribute("step",step);
                 reDirect(request,response,"Apply.jsp");
         }
-        else if(request.getParameter("submit").equals("submitApplier"))
+        else if(request.getParameter("decision").equals("submitApplier"))
         {
             step=2;
             Candidate candidate=hrDB.getApplierDetails(request.getParameter("candidateName"));
@@ -73,7 +76,7 @@ public class HrController extends HttpServlet {
             request.setAttribute("step",step);
             reDirect(request,response,"Apply.jsp");
         }
-        else if(request.getParameter("submit").equals("submitJob"))
+        else if(request.getParameter("decision").equals("submitJob"))
         {
             step=3;
             Vector<Exam> exam=hrDB.getAllExam();
@@ -83,15 +86,15 @@ public class HrController extends HttpServlet {
             request.setAttribute("candidate",candidate);
             request.setAttribute("exam",exam);
             request.setAttribute("step",step);
-                            reDirect(request,response,"Apply.jsp");
+            reDirect(request,response,"Apply.jsp");
         }
-                else if(request.getParameter("submit").equals("DisApprove"))
+        else if(request.getParameter("decision").equals("DisApprove"))
         {
-            step=0;
             hrDB.disApprove(request.getParameter("candidateName"), request.getParameter("candidateJob"));
-                            reDirect(request,response,"Hr_Home.jsp");
+            messageDB.sendDisApproveMessage(request.getParameter("candidateName"),request.getParameter("candidateJob"));
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("Approve"))
+        else if(request.getParameter("decision").equals("Approve"))
         {
             Map<String, String[]> parameters = request.getParameterMap();
             String[] values ;
@@ -113,114 +116,114 @@ public class HrController extends HttpServlet {
             String job=request.getParameter("candidateJob");
             Date deadline=Date.valueOf(request.getParameter("deadline"));
             hrDB.approve(email,deadline,exam,job);
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("show_exam"))
+        else if(request.getParameter("decision").equals("show_exam"))
         {
             request.setAttribute("examTypes",hrDB.getAllExam());
             request.setAttribute("status","show_exam");
             reDirect(request,response,"show.jsp");
         }
-        else if(request.getParameter("submit").equals("add_exam"))
+        else if(request.getParameter("decision").equals("add_exam"))
         {
             request.setAttribute("AllPosition",hrDB.getAllPosition());
             request.setAttribute("status","add_exam");
             reDirect(request,response,"add.jsp");
         }
-        else if(request.getParameter("submit").equals("addExam"))
+        else if(request.getParameter("decision").equals("addExam"))
         {
             hrDB.addExam(request.getParameter("type"),request.getParameter("title"));
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("update_exam"))
+        else if(request.getParameter("decision").equals("update_exam"))
         {
             request.setAttribute("status","update_exam");
             request.setAttribute("examTypes",hrDB.getAllExam());
             reDirect(request,response,"update.jsp");
         }
-        else if(request.getParameter("submit").equals("updateExam"))
+        else if(request.getParameter("decision").equals("updateExam"))
         {
             hrDB.updateExam(request.getParameter("oldTitle"),request.getParameter("newTitle"));
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("delete_exam"))
+        else if(request.getParameter("decision").equals("delete_exam"))
         {
             request.setAttribute("status","delete_exam");
             request.setAttribute("examTypes",hrDB.getAllExam());
             reDirect(request,response,"delete.jsp");
         }
-        else if(request.getParameter("submit").equals("deleteExam"))
+        else if(request.getParameter("decision").equals("deleteExam"))
         {
             hrDB.deleteExam(request.getParameter("title"));
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("show_questions&answers"))
+        else if(request.getParameter("decision").equals("show_questions&answers"))
         {
             request.setAttribute("status","show_questions&answers");
             request.setAttribute("examTypes",hrDB.getAllExam());
             reDirect(request,response,"show.jsp");
         }
-        else if(request.getParameter("submit").equals("showQuestions&Answers"))
+        else if(request.getParameter("decision").equals("showQuestions&Answers"))
         {
             request.setAttribute("status","showQuestions&Answers");
             request.setAttribute("Q&A",hrDB.getAllQuestionsAndAnswers(request.getParameter("type")));
             reDirect(request,response,"show.jsp");
         }
-        else if(request.getParameter("submit").equals("add_questions&answers"))
+        else if(request.getParameter("decision").equals("add_questions&answers"))
         {
             request.setAttribute("status","add_questions&answers");
             reDirect(request,response,"add.jsp");
         }
-        else if(request.getParameter("submit").equals("add_Question"))
+        else if(request.getParameter("decision").equals("add_Question"))
         {
             request.setAttribute("status","add_Question");
             request.setAttribute("examTypes",hrDB.getAllExam());
             reDirect(request,response,"add.jsp");
         }
-        else if(request.getParameter("submit").equals("addQuestion"))
+        else if(request.getParameter("decision").equals("addQuestion"))
         {
             hrDB.addQuestion(request.getParameter("text"),request.getParameter("type"));
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("add_Answer"))
+        else if(request.getParameter("decision").equals("add_Answer"))
         {
             request.setAttribute("status","add_Answer");
             request.setAttribute("Q&A",hrDB.getAllQuestionsAndAnswers());
             reDirect(request,response,"add.jsp");
         }
-        else if(request.getParameter("submit").equals("addAnswer"))
+        else if(request.getParameter("decision").equals("addAnswer"))
         {
             hrDB.addAnswer(
                     request.getParameter("text"),
                     Integer.parseInt(request.getParameter("status")),
                     request.getParameter("QID")
             );
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("update_questions&answers"))
+        else if(request.getParameter("decision").equals("update_questions&answers"))
         {
             request.setAttribute("status","update_questions&answers");
             request.setAttribute("examTypes",hrDB.getAllExam());
             reDirect(request,response,"update.jsp");
         }
-        else if(request.getParameter("submit").equals("update_Question"))
+        else if(request.getParameter("decision").equals("update_Question"))
         {
             request.setAttribute("status","update_Question");
             request.setAttribute("Q&A",hrDB.getAllQuestionsAndAnswers());
             reDirect(request,response,"update.jsp");
         }
-        else if(request.getParameter("submit").equals("updateQuestion"))
+        else if(request.getParameter("decision").equals("updateQuestion"))
         {
             hrDB.updateQuestion(request.getParameter("QID"),request.getParameter("text"));
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("update_Answer"))
+        else if(request.getParameter("decision").equals("update_Answer"))
         {
             request.setAttribute("status","update_Answer");
             request.setAttribute("Q&A",hrDB.getAllQuestionsAndAnswers());
             reDirect(request,response,"update.jsp");
         }
-        else if(request.getParameter("submit").equals("updateAnswer"))
+        else if(request.getParameter("decision").equals("updateAnswer"))
         {
             hrDB.updateAnswer(
                     request.getParameter("AID"),
@@ -228,35 +231,67 @@ public class HrController extends HttpServlet {
                     request.getParameter("text"),
                     Integer.parseInt(request.getParameter("status"))
             );
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("delete_questions&answers"))
+        else if(request.getParameter("decision").equals("delete_questions&answers"))
         {
             request.setAttribute("status","delete_questions&answers");
             request.setAttribute("examTypes",hrDB.getAllExam());
             reDirect(request,response,"delete.jsp");
         }
-        else if(request.getParameter("submit").equals("delete_Question"))
+        else if(request.getParameter("decision").equals("delete_Question"))
         {
             request.setAttribute("status","delete_Question");
             request.setAttribute("Q&A",hrDB.getAllQuestionsAndAnswers());
             reDirect(request,response,"delete.jsp");
         }
-        else if(request.getParameter("submit").equals("deleteQuestion"))
+        else if(request.getParameter("decision").equals("deleteQuestion"))
         {
             hrDB.deleteQuestion(request.getParameter("QID"));
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
         }
-        else if(request.getParameter("submit").equals("delete_Answer"))
+        else if(request.getParameter("decision").equals("delete_Answer"))
         {
             request.setAttribute("status","delete_Answer");
             request.setAttribute("Q&A",hrDB.getAllQuestionsAndAnswers());
             reDirect(request,response,"delete.jsp");
         }
-        else if(request.getParameter("submit").equals("deleteAnswer"))
+        else if(request.getParameter("decision").equals("deleteAnswer"))
         {
             hrDB.deleteAnswer(request.getParameter("AID"));
-            reDirect(request,response,"Hr_Home.jsp");
+            response.sendRedirect("Hr_Home.jsp");
+        }
+        else if(request.getParameter("decision").equals("checkTest&Solution"))
+        {
+            request.setAttribute("status","checkTest&Solution");
+            request.setAttribute("candidates",hrDB.getAllCandidate());
+            reDirect(request,response,"show.jsp");
+        }
+        else if(request.getParameter("decision").equals("checkTest&SolutionStep1"))
+        {
+            request.setAttribute("status","checkTest&SolutionStep1");
+            request.setAttribute("email",request.getAttribute("email"));
+            request.setAttribute("types",hrDB.getAllTakenTest(request.getParameter("email")));
+            reDirect(request,response,"show.jsp");
+        }
+        else if(request.getParameter("decision").equals("checkTest&SolutionStep2"))
+        {
+            request.setAttribute("email",request.getAttribute("email"));
+            request.setAttribute("status","checkTest&SolutionStep2");
+            request.setAttribute("Q&A",hrDB.getTestAndSolution(request.getParameter("type"),request.getParameter("email")));
+            reDirect(request,response,"show.jsp");
+        }
+        else if(request.getParameter("decision").equals("Report"))
+        {
+            request.setAttribute("status","Report_1");
+            request.setAttribute("candidates",hrDB.getAllCandidate());
+            reDirect(request,response,"show.jsp");
+        }
+        else if(request.getParameter("decision").equals("Report_2"))
+        {
+            request.setAttribute("status","Report_2");
+            request.setAttribute("totalScore",hrDB.getAllScore(request.getParameter("email").toString()));
+            reDirect(request,response,"show.jsp");
         }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

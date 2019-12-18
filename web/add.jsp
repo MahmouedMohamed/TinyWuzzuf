@@ -26,7 +26,7 @@
         }
 %>     
 <form action="HrController">
-    <input type="text" name="type"/>
+    <input type="text" name="type" required/>
     <select name="title">
 <%for(int i=0;i<AllPosition.size();i++)
         {
@@ -37,15 +37,15 @@
 <%
         }
 %>  </select> 
-    <input type="submit" name="submit" value="addExam">
+    <input type="submit" name="decision" value="addExam">
 </form>
 <% } %>
 <% if(request.getAttribute("status").toString().equals("add_questions&answers"))
     {
 %>     
 <form action="HrController">
-    <input type="submit" name="submit" value="add_Question">
-    <input type="submit" name="submit" value="add_Answer">
+    <input type="submit" name="decision" value="add_Question">
+    <input type="submit" name="decision" value="add_Answer">
 </form>
 <% } %>
 <% if(request.getAttribute("status").toString().equals("add_Question"))
@@ -57,7 +57,7 @@
         }
 %>
 <form action="HrController">
-<input type="text" name="text">
+<input type="text" name="text" required>
 <select name="type">
 <%      for(int i=0;i<AllExam.size();i++)
         { %>
@@ -65,7 +65,7 @@
                 <%= AllExam.elementAt(i).getType() %>
             </option>  
      <% } %> 
-<input type="submit" name="submit" value="addQuestion">
+<input type="submit" name="decision" value="addQuestion">
 </select>
 </form>
 <% } %>
@@ -78,7 +78,7 @@
         }
 %>
 <form action="HrController">
-<input type="text" name="text">
+<input type="text" name="text" required>
 <select name="status">
     <option value="0">false</option>
     <option value="1">true</option>
@@ -91,7 +91,7 @@
             </option>  
      <% } %>
 </select>
-<input type="submit" name="submit" value="addAnswer">
+<input type="submit" name="decision" value="addAnswer">
 </form>
 <% } %>
     </body>

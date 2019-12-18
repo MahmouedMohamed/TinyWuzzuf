@@ -12,9 +12,9 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form action="UserController" method="GET">
+        <form action="LoginController" method="GET">
             Email <input  type="text" name="username" required/>
-            <input type="submit" name="submit" value="login"/>
+            <input type="submit" name="decision" value="login"/>
             <br>
             don't have an email <a href="register.jsp"/>register now</a>
         </form>

@@ -54,4 +54,8 @@ public class Message {
     {
         return job;
     }
+    public boolean getSeen()
+    {
+        return seen;
+    }
 }

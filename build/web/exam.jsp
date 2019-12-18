@@ -41,24 +41,36 @@
                 });
             });
             </script>
+            <script type="text/javascript">
+            var SESSION_TIMEOUT_MILLIS = <%=request.getSession().getMaxInactiveInterval()%>;
+            timer = setInterval(function () {
+                var element = document.getElementById("log");
+                element.innerHTML = "<h2>You have <b>"+SESSION_TIMEOUT_MILLIS+"</b> seconds to answer the questions</h2>";
+                if(SESSION_TIMEOUT_MILLIS < 1){
+                    clearInterval(timer);
+                    document.getElementById('examForm').submit();
+                }
+                SESSION_TIMEOUT_MILLIS--;
+            }, 1000)
+            </script>
     </head>
     <body>
         <h1> Hello <%= session.getAttribute("username") %> </h1>
-
+      <div id="log"></div>
 <%
         Exam exam=null;
         if (request.getAttribute("exam") != null) {
             exam = (Exam) request.getAttribute("exam");
         }
 %>
-<form action="ExamController">
-      <div id="log"></div>
-
+<form id="examForm" action="ExamController">
         <h1 id="testName"><%= exam.getType() %></h1>
         <h1 id="testJob"><%= exam.getRelatedTo() %></h1>
         <input type="text" name="jobRelateTo" value="<%= exam.getRelatedTo() %>" hidden/>
         <input type="text" name="jobType" value="<%= exam.getType() %>" hidden/>
         <input type="text" name="messageID" value="<%= request.getParameter("messageID") %>" hidden/>
+        <input type="hidden" name="decision" value="submitExam" />
+
 <%= exam.getQuestion().size() %>
 <%= exam.getQuestion().elementAt(0).getQID() %><%          
     for(int i=0;i<exam.getQuestion().size();i++)
@@ -79,9 +91,8 @@
             value="">Skip
             <%
     }
-%>
-    <br><br>
-    <input type="submit" name="submit" value="submitExam" />    
+            %><br><br>
+    <input name="decision" type="submit"  value="submitExam" />    
 </form>
     </body>
 </html>
