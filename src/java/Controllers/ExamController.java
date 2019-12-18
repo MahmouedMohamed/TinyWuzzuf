@@ -54,7 +54,7 @@ public class ExamController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session=request.getSession(true);
-        if(request.getParameter("submit").equals("startExam"))
+        if(request.getParameter("decision").equals("startExam"))
         {
             
             request.setAttribute("messageID",request.getParameter("messageID"));
@@ -65,7 +65,7 @@ public class ExamController extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("exam.jsp");
             dispatcher.forward(request, response);
         }
-        if(request.getParameter("submit").equals("submitExam"))
+        if(request.getParameter("decision").equals("submitExam"))
         {
 //            
             messageDB.sendMessageToHr(

@@ -53,14 +53,35 @@
                }) 
             });
             </script>
+            <%
+                response.setHeader("Cache-Control", "no-cache");
+                response.setHeader("Cache-Control", "no-store");
+                response.setHeader("Pragma", "no-cache");
+                response.setDateHeader("Expires", 0);
+            %>
     </head>
     <body>
+        <div class='header'>
+            <% if(session.getAttribute("username")!=null)
+            { 
+                %><h1>Hello <%=session.getAttribute("username")%> </h1><%
+            }
+            else
+            {
+                response.sendRedirect("Login.jsp"); 
+            }%>
+            <a href="Logout">Logout</a> 
+        </div>
         <% 
             Candidate candidate=new Candidate();
             Vector<Position>position=new Vector<Position>();
             Vector<Message> message=new Vector<Message>();
         if (request.getAttribute("candidate") != null) {
             candidate = (Candidate) request.getAttribute("candidate");
+        }
+        else
+        {
+            response.sendRedirect("Login.jsp");
         }
         if (request.getAttribute("positions") != null) {
             position = (Vector<Position>) request.getAttribute("positions");
@@ -70,8 +91,7 @@
         }
         //message
         %>
-        <h1> Hello <%= candidate.get_username() %> </h1>
-        <form action="UserController"> 
+        <form action="ApplyController"> 
         <select name="job">
         <% 
             for(int i=0;i<position.size();i++)
@@ -84,7 +104,7 @@
             }
         %>
         </select>
-        <input type="submit" name="submit" value="Apply"> 
+        <input type="submit" name="decision" value="Apply"> 
         </form>
         <a id="notification" class="notification">
             <span>Inbox</span>
@@ -95,17 +115,23 @@
                     
             <% for(int i=0;i<message.size();i++)
                 {
-            %>
-            <form action="ExamController">
-                <input type="text" name="messageID" value="<%=message.elementAt(i).getMessageID()%>" hidden/>
-                <input type="text" name="job" value="<%=message.elementAt(i).getJob() %>" hidden/> 
-                    <h1>
-                        <%= message.elementAt(i).getBody() %>
-                    </h1>
-                    <input type="submit" name="submit" value="startExam">
-                                    </form>
-
-            <%
+                    if(message.elementAt(i).getSeen()==true)
+                    {
+                      %><h1>
+                            <%= message.elementAt(i).getBody() %>
+                        </h1><%
+                    }
+                    else
+                    {
+                      %><form action="ExamController">
+                        <input type="text" name="messageID" value="<%=message.elementAt(i).getMessageID()%>" hidden/>
+                        <input type="text" name="job" value="<%=message.elementAt(i).getJob() %>" hidden/> 
+                        <h1>
+                            <%= message.elementAt(i).getBody() %>
+                        </h1>
+                        <input type="submit" name="decision" value="startExam">
+                        </form><%
+                    }
                 }
             %>
             </div>

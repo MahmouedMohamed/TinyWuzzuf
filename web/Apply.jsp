@@ -39,7 +39,11 @@ function selectAll()
     
         
     </script> 
-        </script>
+    
+    <%response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);%>
     </head>
     <body>
     <h1>Hello <%=session.getAttribute("username")%></h1>     
@@ -54,7 +58,7 @@ function selectAll()
         }
 %>
         <h1> Select The applier </h1>
-        <select name="candidateName">
+        <select name="candidateName" required>
             <%
         for(int i=0;i<candidateEmails.size();i++)
         {
@@ -65,7 +69,7 @@ function selectAll()
         }
             %>
             </select>
-            <input type="submit" name="submit" value="submitApplier"/>
+            <input type="submit" name="decision" value="submitApplier"/>
             <%
     }
 
@@ -79,7 +83,7 @@ function selectAll()
 %>
         <h1> Select The job for <%=candidate.get_username()%></h1>
         <input type="text" name="candidateName" value="<%=candidate.get_username()%>" hidden></select>
-        <select name="candidateJob">
+        <select name="candidateJob" required>
             <%
         for(int i=0;i<candidate.get_appliedPosition().size();i++)
         {
@@ -90,8 +94,8 @@ function selectAll()
         }
             %>
             </select>
-            <input type="submit" name="submit" value="DisApprove"/>
-            <input type="submit" name="submit" value="submitJob"/>
+            <input type="submit" name="decision" value="DisApprove"/>
+            <input type="submit" name="decision" value="submitJob"/>
             <%
     }
 
@@ -130,8 +134,8 @@ function selectAll()
             <button onclick="removeOption()"> 
                 Remove option 
             </button> 
-            <input type="date" name="deadline">
-<input type="submit" name="submit" value="Approve"/>
+            <input type="date" name="deadline" required>
+<input type="submit" name="decision" value="Approve"/>
             <%
     }
 %>

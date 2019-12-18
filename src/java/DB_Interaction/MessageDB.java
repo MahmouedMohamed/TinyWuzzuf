@@ -17,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jdk.jfr.Timestamp;
 
 /**
@@ -58,9 +60,8 @@ public class MessageDB {
 			list.add(message);
                 }
             }
-        catch(SQLException ex)
-        {
-            
+        catch (SQLException ex) {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
         }
 	return (list);
     }
@@ -100,9 +101,8 @@ public class MessageDB {
                 }
                 flag=true;
         }
-        catch(SQLException ex)
-        {
-            
+        catch (SQLException ex) {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flag;
     }
@@ -115,7 +115,7 @@ public class MessageDB {
                 +" and telephone number = "+candidate.getTelephone()
                 +" who applied for job called "+Relatedexam
                 +" has finished exam named "+type
-                +"and he got score "+score;
+                +" and he got score "+score;
         try{
             connection = DatabaseConnection.openConnection();
             statement = connection.createStatement();
@@ -129,9 +129,30 @@ public class MessageDB {
             statement.executeUpdate(query);
             flag=true;
         } 
-        catch(SQLException ex)
-        {
-            
+        catch (SQLException ex) {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return flag;
+    }
+    public boolean sendDisApproveMessage(String email,String title)
+    {
+        boolean flag=false;
+        try{
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String msg="Sorry to tell you that, but your cv is not enough to apply for "+title+" try working more hard and goodluck";
+            String query="insert into `message` VALUES("
+                        + "'" +msg+ "'" + ","
+                        + "'" + UUID.randomUUID().toString() + "'" + ","
+                        +"'" + "System" +"'" + ","
+                        + "'" + email  + "'" + ","
+                        + "'" + 1 + "'"
+                        +")";
+            statement.executeUpdate(query);
+            flag=true;
+        } 
+        catch (SQLException ex) {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flag;
     }
@@ -145,9 +166,8 @@ public class MessageDB {
             statement.executeUpdate(query);
             flag=true;
         } 
-        catch(SQLException ex)
-        {
-            
+        catch (SQLException ex) {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flag;
     }

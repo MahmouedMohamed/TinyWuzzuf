@@ -159,7 +159,7 @@ public class QuestionDB {
             list = new Vector<Question>();
             connection = DatabaseConnection.openConnection();
             statement = connection.createStatement();
-            String sql = "SELECT * FROM `solution` WHERE type = "+"'"+type+"' AND "+
+            String sql = "SELECT * FROM `candidate_solution` WHERE type = "+"'"+type+"' AND "+
                     "email = '"+email+"' AND title= '"+title+"' AND AID = 'null'";
             resultSet = statement.executeQuery(sql);
             if(resultSet.next()==false)

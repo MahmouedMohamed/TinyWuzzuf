@@ -59,14 +59,14 @@
         </script>
     </head>
     <body>
-        <form action="UserController" method="GET" onsubmit="return valid()">
+        <form action="RegisterController" method="GET" onsubmit="return valid()">
             Please Enter Your info <br>
             Enter your username:<input id="username" type="text" name="username" onkeyup="checkvalidation()" required/>
             <span id="isE"></span><br><br>
             CV <input id="cv" type="file" name="cv"/>
             <span id="isE2" style="color: red"></span><br><br>
             telephone Number <input id="telephone" type="text" name="telephone" maxlength="14"/>
-            <input type="submit" name="submit" value="register"/>
+            <input type="submit" name="decision" value="register"/>
             <span id="x" style="color: red"></span><br><br>
         </form>
     </body>

@@ -33,7 +33,7 @@ public class SolutionDB {
             statement = connection.createStatement();
             for(int i=0;i<question.size();i++)
             {
-                String sql="insert into `solution` VALUES("
+                String sql="insert into `candidate_solution` VALUES("
                        + "'" + email + "'" + ","
                        +"'" + type +"'" + ","
                        + "'" + title + "'" + ","
@@ -55,7 +55,7 @@ public class SolutionDB {
         try{
             connection = DatabaseConnection.openConnection();
             statement = connection.createStatement();
-            String query="UPDATE `solution` SET"
+            String query="UPDATE `candidate_solution` SET"
                     + " `AID` = "+AID
                     +" WHERE email = "+email+" AND "
                     +"title = "+title+" AND "
@@ -77,7 +77,7 @@ public class SolutionDB {
             connection = DatabaseConnection.openConnection();
             statement = connection.createStatement();
             String query="select `AID` from"
-                    + " `solution` "
+                    + " `candidate_solution` "
                     +" WHERE email = '"+email+"' AND "
                     +"type = '"+type+"' AND "
                     +"title = '"+Relatedexam+"'";
@@ -103,5 +103,93 @@ public class SolutionDB {
             Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return String.valueOf(score+"/"+AID.size()) ;
+    }
+    public String getAllScore(String email)
+    {
+        int score=0;
+        Vector<String> AID=new Vector<String>();
+        try{
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String query="select `AID` from"
+                    + " `candidate_solution` "
+                    +" WHERE email = '"+email+"'";
+            resultSet=statement.executeQuery(query);
+            while(resultSet.next())
+            {
+                AID.add(resultSet.getString(1));
+            }
+            for(int i=0;i<AID.size();i++)
+            {
+                query="select status from `answer` where AID = '"+AID.elementAt(i)+"'";
+                resultSet=statement.executeQuery(query);
+                if(resultSet.next())
+                {
+                    if(resultSet.getString(1).equals("1"))
+                    {
+                        score++;
+                    }
+                }
+            }
+        }catch(SQLException ex)
+        {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return String.valueOf(score+"/"+AID.size()) ;
+    }
+    public Vector<String> getAllCandidate()
+    {
+        Vector<String> list=new Vector<String>();
+        try{
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String query="SELECT DISTINCT email FROM `candidate_solution` WHERE 1";
+            ResultSet rs=statement.executeQuery(query);
+            while(rs.next())
+            {
+                list.add(rs.getString(1));
+            }
+        }catch(SQLException ex)
+        {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    public Vector<String> getAllTakenTest(String email)
+    {
+        Vector<String> list=new Vector<String>();
+        try{
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String query="SELECT DISTINCT type FROM `candidate_solution` WHERE email= '"+email+"'";
+            ResultSet rs=statement.executeQuery(query);
+            while(rs.next())
+            {
+                list.add(rs.getString(1));
+            }
+        }catch(SQLException ex)
+        {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    public Vector<String> getTestAndSolution(String type,String email)
+    {
+        Vector<String> list=new Vector<String>();
+        try{
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            String query="SELECT * FROM `candidate_solution` WHERE email= '"+email+"' and type='"+type+"'";
+            ResultSet rs=statement.executeQuery(query);
+            while(rs.next())
+            {
+                list.add(rs.getString(4));
+                list.add(rs.getString(5));
+            }
+        }catch(SQLException ex)
+        {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
     }
 }
