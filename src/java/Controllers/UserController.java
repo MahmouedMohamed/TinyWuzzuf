@@ -8,7 +8,6 @@ package Controllers;
 import DB_Interaction.CandidateDB;
 import DB_Interaction.DatabaseConnection;
 import DB_Interaction.MessageDB;
-import Models.CV;
 import Models.Candidate;
 import Models.Message;
 import java.io.IOException;

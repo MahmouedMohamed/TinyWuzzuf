@@ -4,6 +4,24 @@
         <servlet-name>ApplyController</servlet-name>
         <servlet-class>Controllers.ApplyController</servlet-class>
     </servlet>
+    
+<!--<servlet>
+    <servlet-name>RegisterController</servlet-name>
+    <servlet-class>Controllers.RegisterController</servlet-class>
+    <multipart-config>
+      <max-file-size>3145728</max-file-size>
+      <max-request-size>5242880</max-request-size>
+    </multipart-config>
+    <init-param>
+        <param-name>fork</param-name>
+        <param-value>false</param-value>
+    </init-param>
+    <init-param>
+        <param-name>xpoweredBy</param-name>
+        <param-value>false</param-value>
+    </init-param>
+    <load-on-startup>3</load-on-startup>
+</servlet>-->
     <servlet-mapping>
         <servlet-name>ApplyController</servlet-name>
         <url-pattern>/ApplyController</url-pattern>

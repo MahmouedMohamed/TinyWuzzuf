@@ -6,7 +6,6 @@
 package Controllers;
 
 import DB_Interaction.CandidateDB;
-import Models.CV;
 import Models.Candidate;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,8 +36,7 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-            Candidate candidate=new CandidateDB().get(request.getParameter("username"));
-            if(candidate.get_username()==null)
+            if(new CandidateDB().get(request.getParameter("username"))==null)
             {
                 try (PrintWriter out = response.getWriter()) {
                         out.print("Sorry username isn't valid");  
