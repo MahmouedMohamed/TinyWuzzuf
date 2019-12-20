@@ -46,7 +46,6 @@ public class HrDB {
     {
         return new CandidateDB().getDetailedCandidate(email);
     }
-    
     public Vector<Position> getAllPosition()
     {
         return new PositionDB().getAll();
@@ -87,11 +86,8 @@ public class HrDB {
 
     public void approve(String email, Date deadline,String exam,String jobTitle) {
         try {	
-//		String sql = "DELETE FROM `apply` WHERE email="
-//                        +" '"+email+"' "+"And title= '"+job+"'";
 		connection = DatabaseConnection.openConnection();
 		statement = connection.createStatement();
-//		statement.executeUpdate(sql);
 		String sql="insert into `application` VALUES("
                     + "'" + jobTitle + "'" + ","
                     + "'" + email + "'" + ","

@@ -5,12 +5,17 @@
  */
 package DB_Interaction;
 
+import Models.Application;
+import Models.Candidate;
 import Models.Exam;
 import Models.Message;
+import Models.Position;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +48,31 @@ public class ApplicationDB {
         }
 	return (exam);
     }
-
+    public Application get(String date)
+    {
+        Application application=null;
+        try {
+		String sql = "SELECT * FROM `application` where `deadline` ='"+date+"'";
+		connection = DatabaseConnection.openConnection();
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery(sql);
+		if(resultSet.next()) {
+                            application=new Application(
+                                    new Position(resultSet.getString(1)),
+                                    new Candidate(resultSet.getString(2)),
+                                    date,
+                                    resultSet.getString(4)
+                            );
+                        }
+            }
+        catch(SQLException ex)
+        {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(ApplicationDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+	return (application);
+    }
     public boolean isThereNext(String email,String title) {
         try {
 		String sql = "SELECT * FROM `application` where `email` ='"+email+"' AND "

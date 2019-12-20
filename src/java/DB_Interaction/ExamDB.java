@@ -42,6 +42,23 @@ public class ExamDB {
         }
 	return (list);
     }
+    public Exam getExam(String type)
+    {
+        Exam exam=null;	
+        try{
+            String sql = "SELECT * FROM `exam` WHERE type="+"'"+type+"'";
+            connection = DatabaseConnection.openConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next()) {
+                exam=new Exam(resultSet.getString(1),resultSet.getString(2));
+            }
+        } 
+        catch (SQLException ex) {
+            Logger.getLogger(ExamDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+	return (exam);
+    }
     public boolean add(String type,String title)
     {
         boolean flag=false;
