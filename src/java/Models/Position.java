@@ -13,10 +13,8 @@ import java.util.Vector;
  */
 public class Position {
     String title;
-//    Vector <User> applier;
     Vector <Exam> exam;
     public Position(){
-//        applier=new Vector<User>();
         exam=new Vector<Exam>();
     }
     public Position(String title){
@@ -25,10 +23,6 @@ public class Position {
     public String getTitle()
     {
         return title;
-    }
-    public void setUser(User user)
-    {
-//        applier.add(user);
     }
     public void setExam(Exam Exam)
     {

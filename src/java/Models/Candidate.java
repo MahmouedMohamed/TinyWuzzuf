@@ -16,11 +16,11 @@ public class Candidate extends User {
     CV cv;
     Vector<Position> appliedPosition;
     Solution solution[];
-    Application application[];
-    public Candidate()
+    public Candidate(String username)
     {
-        
+        this.username=username;
     }
+    public Candidate(){}
     public Candidate(String previlige,String username,String telephoneNumber,CV cv)
     {
         this.privilege=previlige;
@@ -52,10 +52,6 @@ public class Candidate extends User {
     {
         this.solution=solution;
     }
-    public void setappliedPosition(Application application[])
-    {
-        this.application=application;
-    }
     public String get_username()
     {
         return username;
@@ -80,9 +76,4 @@ public class Candidate extends User {
     {
         return solution;
     }
-    public Application[] get_application()
-    {
-        return application;
-    }
-    
 }

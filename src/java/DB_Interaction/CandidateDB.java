@@ -50,12 +50,12 @@ public class CandidateDB{
     public Candidate get(String email) {
         Candidate candidate = null;
 		try {
-			candidate = new Candidate();
-			String sql = "select * from user where email = "+email;
+			String sql = "select * from user where email = '"+email+"'";
 			connection = DatabaseConnection.openConnection();
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(sql);
 			if(resultSet.next()) {
+                                candidate=new Candidate();
                                 candidate.setPrevilige(resultSet.getString(1));
 				candidate.setUsername(resultSet.getString(2));
                             }

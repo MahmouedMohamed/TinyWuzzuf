@@ -21,21 +21,61 @@
             });}
             </script>
             <style>
-div.header {
-    display: block; text-align: center; 
-    position: running(header);
+div.header h1{
+    display: table-header-group;
+}
+div.header a
+{
+    display: table-header-group;
+    background: #ffff00;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+    text-align: center;
+    
 }
 div.footer {
     display: block; text-align: center;
-    position: running(footer);
 }
-@page {
-    @top-center { content: element(header) }
+/*div.header {
+  text-align: right;
+  display: inline;
 }
-@page { 
-    @bottom-center { content: element(footer) }
-}
+
+div.div1 {
+  text-align: left;
+  display: inline;
+}*/
 </style>
+    <script>
+        //Getting value from "ajax.php".
+function fill(Value) {
+   //Assigning value to "search" div in "search.php" file.
+   $('#search').val(Value);
+   //Hiding "display" div in "search.php" file.
+   $('#display').hide();
+}
+$(document).ready(function() {
+   $("#search").keyup(function() {
+       var search = $('#search').val();
+       if (search == "") {
+           $("#display").html("");
+       }
+       else {
+           $.ajax({
+               type: "POST",
+               url: "Search",
+               data: {
+                   search : search
+               },
+               success: function(html) {
+                   $("#display").html(html).show();
+               }
+           });
+       }
+   });
+});
+    </script>
    <%response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Cache-Control", "no-store");
     response.setHeader("Pragma", "no-cache");
@@ -51,8 +91,11 @@ div.footer {
             {
                 response.sendRedirect("Login.jsp"); 
             }%>
-            <a href="Logout">Logout</a> 
+            <a href="Logout" >Logout</a> 
+                <input type="text" id="search" placeholder="Search" />
+                <div id="display"></div>
         </div>
+    <div class="body">
        <form type="GET" action="HrController">
         <h1 class="approve">Approve or dis Approve</h1>
         <input class= "approve" type="submit" name="decision" value="approve"/>
@@ -72,7 +115,7 @@ div.footer {
         <h1>Show Summarized Report</h1>
         <input type="submit" name="decision" value="Report"/>
         </form>
-    
+    </div>
         <div class='footer'>
         </div>
     </body>
