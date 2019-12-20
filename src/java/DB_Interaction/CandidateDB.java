@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author hp
@@ -82,13 +84,13 @@ public class CandidateDB{
                 candidate.setPrevilige(resultSet.getString(2));
                 candidate.setTelephoneNumber(resultSet.getString(3));
             }
-            sql="Select * from cv where email="+candidate.get_username();
-            resultSet = statement.executeQuery(sql);
+            sql="Select * from `cv` where email= "+email;
+            resultSet= statement.executeQuery(sql);
             if(resultSet.next())
-                {
-//                        candidate.setCV(rs.getString(2));
-                }
-            sql="select title from apply where email= "+candidate.get_username();
+            {
+                candidate.setCV(resultSet.getString(2));
+            }
+            sql="select title from apply where email= "+email;
             resultSet = statement.executeQuery(sql);
             while(resultSet.next())
             {
@@ -96,7 +98,7 @@ public class CandidateDB{
             }
             candidate.setAppliedPosition(position);
         }catch(SQLException e) {
-		e.printStackTrace();
+            Logger.getLogger(CandidateDB.class.getName()).log(Level.SEVERE, null, e);
 	}
 	return candidate;
     }

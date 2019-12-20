@@ -46,8 +46,7 @@ public class checkExistance extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        Candidate candidate=candidateDB.get(request.getParameter("username"));
-        if(candidate.get_username()==null)
+        if(candidateDB.get(request.getParameter("username"))==null)
         {
             try (PrintWriter out = response.getWriter())
             {

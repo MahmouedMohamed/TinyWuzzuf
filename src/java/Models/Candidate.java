@@ -13,7 +13,7 @@ import java.util.Vector;
  */
 public class Candidate extends User {
     String telephoneNumber;
-    CV cv;
+    String cv;
     Vector<Position> appliedPosition;
     Solution solution[];
     public Candidate(String username)
@@ -21,7 +21,7 @@ public class Candidate extends User {
         this.username=username;
     }
     public Candidate(){}
-    public Candidate(String previlige,String username,String telephoneNumber,CV cv)
+    public Candidate(String previlige,String username,String telephoneNumber,String cv)
     {
         this.privilege=previlige;
         this.username=username;
@@ -42,7 +42,7 @@ public class Candidate extends User {
     }
     public void setCV(String cv_link)
     {
-        this.cv.link=cv_link;
+        this.cv=cv_link;
     }
     public void setAppliedPosition(Vector<Position> appliedPosition)
     {
@@ -58,7 +58,7 @@ public class Candidate extends User {
     }
     public String get_cv()
     {
-        return cv.getLink();
+        return cv;
     }
     public String getPrevilige()
     {

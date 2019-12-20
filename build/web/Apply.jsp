@@ -83,6 +83,9 @@ function selectAll()
 %>
         <h1> Select The job for <%=candidate.get_username()%></h1>
         <input type="text" name="candidateName" value="<%=candidate.get_username()%>" hidden></select>
+        <object data="data/test.pdf" type="application/pdf" width="300" height="200">
+        <a href="<%= candidate.get_cv()%>"><%=candidate.get_username()%>.pdf</a>
+        </object>
         <select name="candidateJob" required>
             <%
         for(int i=0;i<candidate.get_appliedPosition().size();i++)

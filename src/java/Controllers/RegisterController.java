@@ -6,7 +6,6 @@
 package Controllers;
 
 import DB_Interaction.CandidateDB;
-import Models.CV;
 import Models.Candidate;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,7 +39,7 @@ public class RegisterController extends HttpServlet {
                     "user",
                     request.getParameter("username"),
                     request.getParameter("telephone"),
-                    new CV(request.getParameter(("cv")))
+                    request.getParameter(("cv"))
             );
             new CandidateDB().save(candidate);
             HttpSession session= request.getSession(true);
