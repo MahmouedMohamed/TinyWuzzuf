@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
+import javax.servlet.http.HttpSession;
 /**
  *
  * @author hp
@@ -291,6 +292,13 @@ public class HrController extends HttpServlet {
         {
             request.setAttribute("status","Report_2");
             request.setAttribute("totalScore",hrDB.getAllScore(request.getParameter("email").toString()));
+            reDirect(request,response,"show.jsp");
+        }
+        else if(request.getParameter("decision").equals("GetMessages"))
+        {
+            HttpSession session=request.getSession();
+            request.setAttribute("status","GetMessages");
+            request.setAttribute("message", messageDB.get(session.getAttribute("username").toString()));
             reDirect(request,response,"show.jsp");
         }
     }

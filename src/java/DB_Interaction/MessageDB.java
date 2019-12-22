@@ -35,7 +35,15 @@ public class MessageDB {
         Message message=null;
         try {	
 		list = new Vector<Message>();
-		String sql = "SELECT * FROM `Message` where `to` ='"+email+"'";
+                String sql="";
+                if(new CandidateDB().get(email).getPrevilige().equals("user"))
+                {
+                     sql = "SELECT * FROM `Message` where `to` ='"+email+"'";
+                }
+                else
+                {
+                     sql = "SELECT * FROM `Message` where `to` = 'HR'";
+                }
 		connection = DatabaseConnection.openConnection();
 		statement = connection.createStatement();
 		resultSet = statement.executeQuery(sql);
