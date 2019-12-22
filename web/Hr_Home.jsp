@@ -4,6 +4,7 @@
     Author     : hp
 --%>
 
+<%@page import="Models.Message"%>
 <%@page import="java.util.Vector"%>
 <%@page import="Models.Candidate"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -14,11 +15,11 @@
         <title>JSP Page</title>
         <script src="jquery-3.4.1.min.js"></script>
         <script>
-            
-            function hide(item){
-            $(document).ready(function(){
-               $(item).hide();
-            });}
+                $(document).ready(function(){
+               $("#notification").click(function(){
+                   $("#message").show();
+               }) 
+            });
             </script>
             <style>
 div.header h1{
@@ -76,6 +77,32 @@ $(document).ready(function() {
    });
 });
     </script>
+    <style>
+            .notification 
+            {
+            background-color: #555;
+            color: white;
+            text-decoration: none;
+            padding: 15px 26px;
+            position: relative;
+            display: inline-block;
+            border-radius: 2px;
+            }
+
+            .notification:hover {
+              background: red;
+            }
+
+            .notification .badge {
+              position: absolute;
+              top: -10px;
+              right: -10px;
+              padding: 5px 10px;
+              border-radius: 50%;
+              background: red;
+              color: white;
+            }
+            </style>
    <%response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Cache-Control", "no-store");
     response.setHeader("Pragma", "no-cache");
@@ -95,6 +122,7 @@ $(document).ready(function() {
                 <input type="text" id="search" placeholder="Search" />
                 <div id="display"></div>
         </div>
+            
     <div class="body">
        <form type="GET" action="HrController">
         <h1 class="approve">Approve or dis Approve</h1>
@@ -111,9 +139,9 @@ $(document).ready(function() {
         <input type="submit" name="decision" value="delete_questions&answers"/>
         <h1>See full tests</h1>
         <input type="submit" name="decision" value="checkTest&Solution"/>
-        <input type="submit" name="decision" value="search"/>
         <h1>Show Summarized Report</h1>
         <input type="submit" name="decision" value="Report"/>
+        <input type="submit" name="decision" value="GetMessages"/>
         </form>
     </div>
         <div class='footer'>

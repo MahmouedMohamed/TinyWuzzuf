@@ -176,6 +176,8 @@ public class SolutionDB {
     public Vector<String> getTestAndSolution(String type,String email)
     {
         Vector<String> list=new Vector<String>();
+        Vector<String> qList=new Vector<String>();
+        Vector<String> aList=new Vector<String>();
         try{
             connection = DatabaseConnection.openConnection();
             statement = connection.createStatement();
@@ -183,8 +185,30 @@ public class SolutionDB {
             ResultSet rs=statement.executeQuery(query);
             while(rs.next())
             {
-                list.add(rs.getString(4));
-                list.add(rs.getString(5));
+                qList.add(rs.getString(4));
+                aList.add(rs.getString(5));
+            }
+            for(int i=0;i<qList.size();i++)
+            {
+                query="SELECT text from question where QID = '"+qList.elementAt(i)+"'";
+                rs=statement.executeQuery(query);
+                if(rs.next())
+                {
+                    list.add(rs.getString(1));
+                }
+            }
+            for(int i=0;i<aList.size();i++)
+            {
+                query="SELECT text from answer where AID = '"+aList.elementAt(i)+"'";
+                rs=statement.executeQuery(query);
+                if(rs.next())
+                {
+                    list.add(rs.getString(1));
+                }
+                else
+                {
+                    list.add("skipped");
+                }
             }
         }catch(SQLException ex)
         {

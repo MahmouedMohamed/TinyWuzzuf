@@ -4,6 +4,7 @@
     Author     : hp
 --%>
 
+<%@page import="Models.Message"%>
 <%@page import="Models.Question"%>
 <%@page import="Models.Exam"%>
 <%@page import="java.util.Vector"%>
@@ -128,11 +129,11 @@ else if(request.getAttribute("status").equals("checkTest&SolutionStep2"))
             AllQuestion=(Vector<String>) request.getAttribute("Q&A");
         }
 %><%
-         for(int i=0;i<=AllQuestion.size()/2;i+=2)
+         for(int i=0;i<AllQuestion.size()/2;i++)
         { %>
             <h2><%= AllQuestion.elementAt(i) %></h2>
             <ul>
-                <li><%= AllQuestion.elementAt(i+1)%></li>
+                <li><%= AllQuestion.elementAt(i+AllQuestion.size()/2)%></li>
             </ul>
     <% }
             }
@@ -170,5 +171,21 @@ else if(request.getAttribute("status").equals("checkTest&SolutionStep2"))
 <%
             }
         %>
+        <%  if(request.getAttribute("status").toString().equals("GetMessages"))
+    {
+        Vector<Message> message=new Vector<Message>();
+        if(request.getAttribute("message")!=null)
+        {
+            message=(Vector<Message>) request.getAttribute("message");
+        }
+%><%
+    for(int i=0;i<message.size();i++)
+        {
+%>          <h1>
+            <%= message.elementAt(i).getBody() %>
+            </h1><%
+        }
+    }
+%>
     </body>
 </html>

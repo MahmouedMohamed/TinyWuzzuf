@@ -4,6 +4,8 @@
     Author     : hp
 --%>
 
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.Collection"%>
 <%@page import="Models.Exam"%>
 <%@page import="java.util.Vector"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -53,6 +55,10 @@
                 SESSION_TIMEOUT_MILLIS--;
             }, 1000)
             </script>
+              <%response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);%>
     </head>
     <body>
         <h1> Hello <%= session.getAttribute("username") %> </h1>
@@ -61,6 +67,10 @@
         Exam exam=null;
         if (request.getAttribute("exam") != null) {
             exam = (Exam) request.getAttribute("exam");
+        }
+        for(int i=0;i<exam.getQuestion().size();i++)
+        {
+                Collections.shuffle(exam.getQuestion().elementAt(i).getAnswer());
         }
 %>
 <form id="examForm" action="ExamController">

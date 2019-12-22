@@ -24,7 +24,7 @@ public class DatabaseConnection {
         else {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tinywuzzuf?autoReconnect=true&useSSL=false","root", "Mahmoued23");
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/project?autoReconnect=true&useSSL=false","root", "Mahmoued23");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {
